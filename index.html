@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="authPage" class="auth-page">
+    <div class="auth-card">
+      <div class="brand">EMS</div>
+      <h1 id="authTitle">Welcome Back</h1>
+      <p id="authSubtitle">Sign in to manage your organization.</p>
+
+      <form id="authForm">
+        <div id="nameGroup" class="form-group hidden">
+          <label>Full Name</label>
+          <input id="authName" type="text" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input id="authEmail" type="email" placeholder="admin@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="authPassword" type="password" placeholder="••••••••" required minlength="6">
+        </div>
+        <button class="primary-btn full" type="submit" id="authSubmit">Sign In</button>
+      </form>
+
+      <p class="switch-text">
+        <span id="switchMessage">Don't have an account?</span>
+        <button type="button" class="link-btn" id="switchAuth">Create Account</button>
+      </p>
+      <p class="demo-note">Demo: sign up with any email/password. New accounts are created as Viewer.</p>
+    </div>
+  </div>
+
+  <div id="appPage" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><span>EMS</span><small>Employee Management</small></div>
+      <nav>
+        <button class="nav-btn active" data-section="dashboard">📊 Dashboard</button>
+        <button class="nav-btn" data-section="employees">👥 Employees</button>
+        <button class="nav-btn" data-section="departments">🏢 Departments</button>
+        <button class="nav-btn" data-section="reports">📄 Reports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-mini">
+          <div class="avatar" id="userAvatar">U</div>
+          <div><strong id="userName">User</strong><small id="userRole">Viewer</small></div>
+        </div>
+        <button id="logoutBtn" class="logout-btn">↪ Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">Dashboard</h2>
+          <p id="pageSubtitle">Overview of your workforce</p>
+        </div>
+        <div class="top-actions">
+          <span id="currentDate"></span>
+          <button class="icon-btn" id="themeBtn" title="Toggle theme">☾</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="section active-section">
+        <div class="stats-grid">
+          <div class="stat-card"><span>Total Employees</span><strong id="totalEmployees">0</strong><b>👥</b></div>
+          <div class="stat-card"><span>Active Employees</span><strong id="activeEmployees">0</strong><b>✓</b></div>
+          <div class="stat-card"><span>Departments</span><strong id="totalDepartments">0</strong><b>🏢</b></div>
+          <div class="stat-card"><span>Avg. Salary</span><strong id="avgSalary">₹0</strong><b>₹</b></div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-head"><h3>Department Overview</h3></div>
+            <div id="departmentChart" class="chart-list"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Recent Employees</h3></div>
+            <div id="recentEmployees"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="employees" class="section">
+        <div class="toolbar">
+          <div class="search-wrap">🔎 <input id="searchInput" placeholder="Search employees..."></div>
+          <select id="departmentFilter"><option value="">All Departments</option></select>
+          <select id="statusFilter"><option value="">All Status</option><option>Active</option><option>Inactive</option></select>
+          <button id="addEmployeeBtn" class="primary-btn">+ Add Employee</button>
+        </div>
+        <div class="panel table-panel">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Employee</th><th>Department</th><th>Designation</th><th>Joining Date</th><th>Status</th><th>Salary</th><th>Actions</th></tr></thead>
+              <tbody id="employeeTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="departments" class="section">
+        <div class="toolbar"><h3>Department Management</h3><button id="addDepartmentBtn" class="primary-btn">+ Add Department</button></div>
+        <div id="departmentCards" class="department-grid"></div>
+      </section>
+
+      <section id="reports" class="section">
+        <div class="report-hero">
+          <h3>Employee Reports</h3>
+          <p>Export your current employee records for analysis and sharing.</p>
+          <button id="exportBtn" class="primary-btn">⬇ Export CSV</button>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Workforce Summary</h3></div>
+          <div id="reportSummary" class="report-summary"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="employeeModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h3 id="modalTitle">Add Employee</h3><button class="close-btn" data-close="employeeModal">×</button></div>
+      <form id="employeeForm" class="form-grid">
+        <input type="hidden" id="employeeId">
+        <div class="form-group"><label>Full Name</label><input id="empName" required></div>
+        <div class="form-group"><label>Email</label><input id="empEmail" type="email" required></div>
+        <div class="form-group"><label>Phone</label><input id="empPhone" required></div>
+        <div class="form-group"><label>Department</label><select id="empDepartment" required></select></div>
+        <div class="form-group"><label>Designation</label><input id="empDesignation" required></div>
+        <div class="form-group"><label>Salary</label><input id="empSalary" type="number" min="0" required></div>
+        <div class="form-group"><label>Joining Date</label><input id="empJoining" type="date" required></div>
+        <div class="form-group"><label>Status</label><select id="empStatus"><option>Active</option><option>Inactive</option></select></div>
+        <div class="form-group full-row"><label>Address</label><textarea id="empAddress" rows="3"></textarea></div>
+        <div class="modal-actions full-row"><button type="button" class="secondary-btn" data-close="employeeModal">Cancel</button><button class="primary-btn" type="submit">Save Employee</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="departmentModal" class="modal hidden">
+    <div class="modal-card small">
+      <div class="modal-head"><h3>Add Department</h3><button class="close-btn" data-close="departmentModal">×</button></div>
+      <form id="departmentForm">
+        <div class="form-group"><label>Department Name</label><input id="departmentName" required></div>
+        <div class="modal-actions"><button type="button" class="secondary-btn" data-close="departmentModal">Cancel</button><button class="primary-btn">Add</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
